@@ -1,0 +1,34 @@
+<!-- HEADER AND MEAL COUNT -->
+<div class="jumbotron text-center">
+    <h1>Total meals <span class="label label-info">{{meals.length}}</span></h1>
+</div>
+
+<!-- MEAL LIST -->
+<div id="meal-list" class="row">
+    <div class="col-sm-4 col-sm-offset-4">
+
+        <!-- LOOP OVER THE MEALS IN $scope.meals -->
+        <div class="checkbox" ng-repeat="meal in meals">
+            <label>
+                <input type="checkbox" ng-click="deleteMeal(meal._id)"> {{meal.name}}
+            </label>
+        </div>
+
+    </div>
+</div>
+
+<!-- FORM TO CREATE MEAL -->
+<div id="meal-form" class="row">
+    <div class="col-sm-8 col-sm-offset-2 text-center">
+        <form>
+            <div class="form-group">
+                <!-- BIND THIS VALUE TO formData IN ANGULAR -->
+                <input type="text" class="form-control input-lg text-center" placeholder="meal name" ng-model="formData.name">
+                <input type="text" class="form-control input-lg text-center" placeholder="meal description" ng-model="formData.description">
+            </div>
+
+            <!-- createMeal() WILL CREATE NEW MEAL -->
+            <button type="submit" class="btn btn-primary btn-lg" ng-click="createMeal()">Add</button>
+        </form>
+    </div>
+</div>

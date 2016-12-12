@@ -1,0 +1,42 @@
+<!-- HEADER CREATE MEAL !-->
+<div class="jumbotron text-center">
+    <h2>Create Meal</h2>
+</div>
+
+<!-- INGREDIENTS SEARCH AND LIST -->
+<div class="col-sm-4 col-md-4 col-lg-4">
+    <div class="row">
+        <form>
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit" ng-click="searchIngredientByName()">Search</button>
+                </span>
+                <input type="text" class="form-control" placeholder="Ingredient name..." ng-model="formIngredientSearch.name">
+            </div>
+        </form>
+    </div>
+    <div class="row" id="ingredient-search-result">
+        <ul class="list-group">
+            <li class="list-group-item hover-lightblue" ng-repeat="ingredient in ingredientSearchResult" ng-click="addIngredient(ingredient._id)">{{ingredient.name}}</li>
+        </ul>
+    </div>
+    <div class="row" id="added-ingredients">
+        <ul class="list-group">
+            <li class="list-group-item hover-orange background-lightgreen" ng-repeat="ingredient in addedIngredients" ng-click="deleteAddedIngredient(ingredient._id)">{{ingredient.name}}</li>
+        </ul>
+    </div>
+</div>
+
+<!-- MEAL INFORMATIONS -->
+<div class="col-sm-4 col-md-4 col-lg-4">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><input id="new-meal-name" type="text" placeholder="Meal name..." ng-model="newMealName"></div>
+        <div class="panel-body"><textarea id="new-meal-description" placeholder="Meal description..." ng-model="newMealDescription"></textarea></div>
+    </div>
+</div>
+
+<!-- NUTRITIONAL RESULTS -->
+<div class="col-sm-4 col-md-4 col-lg-4">
+
+</div>

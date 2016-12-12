@@ -1,0 +1,41 @@
+.display-none {
+    display: none;
+}
+
+#ingredient-search-result {
+    display: block;
+    border: solid 1px lightgrey;
+    height: 200px;
+    width: 108.5%;
+    padding: none;
+    overflow-y: scroll;
+}
+
+#meal-list {
+    margin-bottom:30px;
+}
+
+#new-meal-name {
+    background-color: #f5f5f5;
+    border: none;
+    width: 100%;
+}
+
+#new-meal-description {
+    border: medium none;
+    height: 160px;
+    width: 100%;
+    resize: none;
+}
+
+.hover-lightblue:hover {
+    background-color: lightblue;
+}
+
+.hover-orange:hover {
+    background-color: orange;
+}
+
+.background-lightgreen {
+    background-color: lightgreen;
+}
