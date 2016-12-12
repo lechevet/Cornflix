@@ -1,21 +1,28 @@
-var cornflix = angular.module( 'cornflix', [ 'ui.router' ] );
+var cornflix = angular.module('cornflix', ['ui.router'])
+  .config(function($httpProvider, $stateProvider, $urlRouterProvider, $routeProvider, $locationProvider) {
 
-cornflix.config( [ '$httpProvider', '$stateProvider', '$urlRouterProvider',
-    function( $httpProvider, $stateProvider, $urlRouterProvider ) {
+    // Route 404
+    // Si l'URL demandé n'est pas présent dans le stateProvider,
+    // on retourne sur l'URL 404
+    $urlRouterProvider.otherwise('/');
 
-        $stateProvider
-            .state( 'meals', {
-                url: '/meals',
-                templateUrl: 'meals.html'
-            } )
-            .state( 'createMeal', {
-                url: '/createMeal',
-                templateUrl: 'createMeal.html'
-            } );
+    $stateProvider
+        .state('home', {
+          url: '/',
+          templateUrl: 'home.html'
+        })
+        .state('meals', {
+            url: '/meals',
+            templateUrl: 'meals.html'
+        })
+        .state( 'createMeal', {
+            url: '/createMeal',
+            templateUrl: 'createMeal.html'
+        });
 
-        //$urlRouterProvider.otherwise( '/meals' );
-    }
-] );
+    // use the HTML5 History API
+    $locationProvider.html5Mode(true);
+});
 
 function mainController( $scope, $http ) {
     $scope.formData = {};
