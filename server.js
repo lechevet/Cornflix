@@ -51,20 +51,12 @@ app.get( '/api/meals', function( req, res ) {
 } );
 
 app.post( '/api/meals', function( req, res ) {
-    Meal.create( {
-        user_id: 0,
-        public: true,
-        name: req.body.name,
-        description: req.body.description,
-        ingredients: null
-    }, function( err, meal ) {
-        if ( err ) res.send( err );
-
-        Meal.find( function( err, meals ) {
-            if ( err ) res.send( err )
-            res.json( meals );
+    console.log( req.body );
+    Meal.create( req.body,
+        function( err, meal ) {
+            if ( err ) res.send( err );
+            else res.send( meal );
         } );
-    } );
 } );
 
 app.delete( '/api/meals/:meal_id', function( req, res ) {
@@ -99,15 +91,15 @@ app.get( '*', function( req, res ) {
 } );
 
 //  MONGO MODELS
-var Meal = mongoose.model( 'Meal', {
+var Meal = mongoose.model( 'meals', {
     user_id: String,
     public: Boolean,
     name: String,
     description: String,
-    ingredients: [ Number ]
+    ingredients: [ String ]
 } );
 
-var Ingredient = mongoose.model( 'Ingredient', {
+var Ingredient = mongoose.model( 'ingredients', {
     category: String,
     name: String,
     sodium_mg: Number,

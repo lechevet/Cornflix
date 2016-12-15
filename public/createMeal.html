@@ -29,14 +29,62 @@
 
 <!-- MEAL INFORMATIONS -->
 <div class="col-sm-4 col-md-4 col-lg-4">
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading"><input id="new-meal-name" type="text" placeholder="Meal name..." ng-model="newMealName"></div>
-        <div class="panel-body"><textarea id="new-meal-description" placeholder="Meal description..." ng-model="newMealDescription"></textarea></div>
-    </div>
+    <form>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading"><input id="new-meal-name" type="text" placeholder="Meal name..." ng-model="formCreateMeal.name"></div>
+            <div class="panel-body"><textarea id="new-meal-description" placeholder="Meal description..." ng-model="formCreateMeal.description"></textarea></div>
+        </div>
+        <input type="checkbox" checked ng-click="setPublic()"><span> publié dans la communauté </span>
+        <button type="button" class="btn btn-primary float-right" ng-click="createMeal()">*    Créer    *</button>
+    </form>
 </div>
 
 <!-- NUTRITIONAL RESULTS -->
 <div class="col-sm-4 col-md-4 col-lg-4">
-
+    <div class="panel panel-default">
+        <div class="panel-heading"><span>Bilan</span></div>
+        <div class="panel-body">
+            <span> Sodium (mg) </span><span class="badge"> {{bilan.sodium}} </span></br>
+            <span> Magnesium (mg) </span><span class="badge"> {{bilan.magnesium}} </span></br>
+            <span> Phosphore (mg) </span><span class="badge"> {{bilan.phosphore}} </span></br>
+            <span> Potassium (mg) </span><span class="badge"> {{bilan.potassium}} </span></br>
+            <span> Calcium (mg) </span><span class="badge"> {{bilan.calcium}} </span></br>
+            <span> Manganèse (mg) </span><span class="badge"> {{bilan.manganese}} </span></br>
+            <span> Fer (mg) </span><span class="badge"> {{bilan.fer}} </span></br>
+            <span> Cuivre (mg) </span><span class="badge"> {{bilan.cuivre}} </span></br>
+            <span> Zinc (mg) </span><span class="badge"> {{bilan.zinc}} </span></br>
+            <span> Selenium (µg) </span><span class="badge"> {{bilan.selenium}} </span></br>
+            <span> Iode (µg) </span><span class="badge"> {{bilan.iode}} </span></br>
+            <span> Proteine (g) </span><span class="badge"> {{bilan.proteine}} </span></br>
+            <span> Proteine brute (g) </span><span class="badge"> {{bilan.proteine_brute}} </span></br>
+            <span> Glucide (g) </span><span class="badge"> {{bilan.glucide}} </span></br>
+            <span> Sucre (g) </span><span class="badge"> {{bilan.sucre}} </span></br>
+            <span> Energie (kj) </span><span class="badge"> {{bilan.energie_kj}} </span></br>
+            <span> Energie (kcal) </span><span class="badge"> {{bilan.energie_kcal}} </span></br>
+            <span> Amidon (g) </span><span class="badge"> {{bilan.amidon}} </span></br>
+            <span> Energie Jones (kj) </span><span class="badge"> {{bilan.energie_jones_kj}} </span></br>
+            <span> Energie Jones (kcal) </span><span class="badge"> {{bilan.energie_jones_kcal}} </span></br>
+            <span> Polyols (g) </span><span class="badge"> {{bilan.polyols}} </span></br>
+            <span> Fibre (g) </span><span class="badge"> {{bilan.fibre}} </span></br>
+            <span> Eau (g) </span><span class="badge"> {{bilan.eau}} </span></br>
+            <span> Lipide (g) </span><span class="badge"> {{bilan.lipide}} </span></br>
+            <span> Acide gras saturés (g) </span><span class="badge"> {{bilan.acide_gras_sature}} </span></br>
+            <span> Beta carotene (µg) </span><span class="badge"> {{bilan.beta_carotene}} </span></br>
+            <span> Vitamine D (µg) </span><span class="badge"> {{bilan.vitamine_d}} </span></br>
+            <span> Vitamine E (mg) </span><span class="badge"> {{bilan.vitamine_e}} </span></br>
+            <span> Vitamine K1 (µg) </span><span class="badge"> {{bilan.vitamine_k1}} </span></br>
+            <span> Vitamine K2 (µg) </span><span class="badge"> {{bilan.vitamine_k2}} </span></br>
+            <span> Vitamine C (mg) </span><span class="badge"> {{bilan.vitamine_c}} </span></br>
+            <span> Vitamine B1 (mg) </span><span class="badge"> {{bilan.vitamine_b1}} </span></br>
+            <span> Vitamine B2 (mg) </span><span class="badge"> {{bilan.vitamine_b2}} </span></br>
+            <span> Vitamine B3 (mg) </span><span class="badge"> {{bilan.vitamine_b3}} </span></br>
+            <span> Vitamine B5 (mg) </span><span class="badge"> {{bilan.vitamine_b5}} </span></br>
+            <span> Vitamine B6 (mg) </span><span class="badge"> {{bilan.vitamine_b6}} </span></br>
+            <span> Vitamine B12 (µg) </span><span class="badge"> {{bilan.vitamine_b12}} </span></br>
+            <span> Vitamine B9 (µg) </span><span class="badge"> {{bilan.vitamine_b9}} </span></br>
+            <span> Alcool (g) </span><span class="badge"> {{bilan.alcool}} </span></br>
+            <span> Cholesterol (mg) </span><span class="badge"> {{bilan.cholesterol}} </span></br>
+        </div>
+    </div>
 </div>
