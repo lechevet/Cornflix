@@ -17,6 +17,8 @@ cornflix.config( [ '$httpProvider', '$stateProvider', '$urlRouterProvider',
     }
 ] );
 
+
+
 //functions here
 function mainController( $scope, $http ) {
     $scope.userId = 0; /////////    A SUPPRIMER
@@ -84,6 +86,28 @@ function mainController( $scope, $http ) {
                 console.log( 'Error: ' + data );
             } );
     };
+
+    //  adds a user
+    $scope.addUser = function( id ) {
+      //test stormpath
+        var account = {
+          givenName: 'Joe',
+          surname: 'Stormtrooper',
+          username: 'tk421',
+          email: 'tk421@stormpath.com',
+          password: 'Changeme1',
+          customData: {
+            favoriteColor: 'white'
+          }
+        };
+
+        $app.createAccount(account, function(err, createdAccount) {
+          console.log('Account:', createdAccount);
+        });
+        //end of test stormpath
+    };
+
+
 
     //modifies the weight of an ingredient and refreshes the bilan
     $scope.setWeight = function (id, weight){
