@@ -49,12 +49,6 @@ app.get( '/api/ingredients', function( req, res ) {
     } );
 } );
 
-//test stormpath
-app.get('/home', stormpath.getUser, function (req, res) {
-  var stormpathApplication = req.app.get('stormpathApplication');
-});
-//fin test stormpath
-
 app.get( '/api/ingredients/:ingredient_name', function( req, res ) {
     console.log( "search result : " );
     Ingredient.find( {
@@ -74,6 +68,8 @@ app.get( '/api/meals', function( req, res ) {
         if ( !err ) res.json( meals );
     } );
 } );
+
+
 
 app.post( '/api/meals', function( req, res ) {
     console.log( req.body );

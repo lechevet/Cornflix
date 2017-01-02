@@ -2,6 +2,24 @@
     display: none;
 }
 
+#create-meal-pill {
+    background-color: rgba(0, 0, 255, 0.1);
+}
+
+#login-pill {
+    background-color: rgba(0, 255, 0, 0.5);
+}
+
+#register-pill {
+    background-color: rgba(243, 156, 18, 0.5);
+
+}
+
+#logo {
+  width : 50%;
+  height : 50%;
+}
+
 #ingredient-search-result {
     display: block;
     border: solid 1px lightgrey;

@@ -11,9 +11,14 @@ cornflix.config( [ '$httpProvider', '$stateProvider', '$urlRouterProvider',
             .state( 'createMeal', {
                 url: '/createMeal',
                 templateUrl: 'createMeal.html'
+            } )
+
+            .state( 'home', {
+                url: '/home',
+                templateUrl: 'home.html'
             } );
 
-        $urlRouterProvider.otherwise( '/createMeal' );
+        $urlRouterProvider.otherwise( '/home' );
     }
 ] );
 
@@ -29,6 +34,15 @@ function mainController( $scope, $http ) {
     $scope.publicMeal = "true";
 
     $scope.bilan = {};
+
+    $http.get( '/api/home' )
+        .success( function( data ) {
+            $scope.meals = data;
+            //console.log( data );
+        } )
+        .error( function( data ) {
+            console.log( data );
+        } );
 
     $http.get( '/api/meals' )
         .success( function( data ) {
@@ -87,25 +101,7 @@ function mainController( $scope, $http ) {
             } );
     };
 
-    //  adds a user
-    $scope.addUser = function( id ) {
-      //test stormpath
-        var account = {
-          givenName: 'Joe',
-          surname: 'Stormtrooper',
-          username: 'tk421',
-          email: 'tk421@stormpath.com',
-          password: 'Changeme1',
-          customData: {
-            favoriteColor: 'white'
-          }
-        };
 
-        $app.createAccount(account, function(err, createdAccount) {
-          console.log('Account:', createdAccount);
-        });
-        //end of test stormpath
-    };
 
 
 
