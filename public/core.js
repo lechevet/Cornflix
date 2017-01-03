@@ -17,6 +17,12 @@ var cornflix = angular.module( 'cornflix', [ 'ui.router' ] )
                 url: '/createMeal',
                 templateUrl: 'createMeal.html'
             } )
+            .state( 'login', {
+                url: '/login',
+            } )
+            .state( 'register', {
+                url: '/register'
+            } )
 
         .state( 'home', {
             url: '/home',
@@ -24,7 +30,7 @@ var cornflix = angular.module( 'cornflix', [ 'ui.router' ] )
         } );
 
         // use the HTML5 History API
-        $locationProvider.html5Mode( true );
+        //$locationProvider.html5Mode( true );
     } );
 
 
