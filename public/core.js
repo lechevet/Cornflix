@@ -6,13 +6,9 @@ var cornflix = angular.module( 'cornflix', [ 'ui.router' ] )
         // Route 404
         // Si l'URL demandé n'est pas présent dans le stateProvider,
         // on retourne sur l'URL 404
-        $urlRouterProvider.otherwise( '/' );
+        $urlRouterProvider.otherwise( '/home' );
 
         $stateProvider
-            .state( 'home', {
-                url: '/',
-                templateUrl: 'home.html'
-            } )
             .state( 'meals', {
                 url: '/meals',
                 templateUrl: 'meals.html'
@@ -153,21 +149,20 @@ function mainController( $scope, $http ) {
     function getMealBilan( ingredients, callback ) {
         console.log( "getMealBilan()" );
         var bilan = {};
+        var weight = 0;
         $http.post( '/api/ingredients/searchById', ingredients )
             .success( function( data ) {
                 console.log( "find success" );
-                var tmp = data[ 0 ];
-                //var tmp = data;
-                for ( i in tmp ) {
-                    tmp[ i ].weight = ingredients[ i ].weight;
-                }
-                Object.keys( tmp[ 0 ] ).forEach( function( key, index ) {
+                data.forEach( function( element, index, array ) {
+                    element.weight = ingredients[ index ].weight;
+                } )
+                Object.keys( data[ 0 ] ).forEach( function( key, index ) {
                     //reset the property first
                     bilan[ key ] = 0;
 
                     //add every ingredients property by a ratio of its weight
-                    for ( i in tmp ) {
-                        bilan[ key ] += Math.round( ( bilan[ key ] + tmp[ i ][ key ] ) * 100 / 100 * tmp[ i ].weight / 100 );
+                    for ( i in data ) {
+                        bilan[ key ] += Math.round( ( bilan[ key ] + data[ i ][ key ] ) * 100 / 100 * data[ i ].weight / 100 );
                     }
                 } );
                 console.log( "return bilan" );

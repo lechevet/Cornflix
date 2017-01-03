@@ -1,20 +1,20 @@
 //  SET UP
 var express = require( 'express' );
-var stormpath = require('express-stormpath'); //Gestion des comptes utilisateur
+var stormpath = require( 'express-stormpath' ); //Gestion des comptes utilisateur
 var app = express();
-app.use(stormpath.init(app, {
-  apiKey: {
-    id: '4MIUE5CPOB6KEDF4UM71NAR6Z',
-    secret: 'VmkWcyZ3qmfSaInhXIFrz/8Y3sQDi1GV1dTGhoYCsZk'
-  },
-  application: {
-    href: `https://api.stormpath.com/v1/applications/5UuMr81z2fnECInr8cuxUj`
-  }
-}));
+app.use( stormpath.init( app, {
+    apiKey: {
+        id: '4MIUE5CPOB6KEDF4UM71NAR6Z',
+        secret: 'VmkWcyZ3qmfSaInhXIFrz/8Y3sQDi1GV1dTGhoYCsZk'
+    },
+    application: {
+        href: `https://api.stormpath.com/v1/applications/5UuMr81z2fnECInr8cuxUj`
+    }
+} ) );
 
-app.on('stormpath.ready', function() {
-  app.listen(3000);
-});
+app.on( 'stormpath.ready', function() {
+    app.listen( 3000 );
+} );
 var mongoose = require( 'mongoose' );
 var morgan = require( 'morgan' ); //log requests to the console
 var bodyParser = require( 'body-parser' ); //pull information from HTML POST
@@ -108,7 +108,7 @@ app.post( '/api/ingredients/searchById', function( req, res ) {
     var i = 0;
     console.log( req.body );
     for ( var j = 0; j < req.body.length; j++ ) {
-        Ingredient.find( {
+        Ingredient.findOne( {
             _id: req.body[ j ]._id
         }, function( err, ingredient ) {
             if ( err ) res.send( err );
