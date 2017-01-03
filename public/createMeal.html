@@ -1,3 +1,7 @@
+<!-- NAVBAR !-->
+<div ng-include src="'navbar.html'"></div>
+
+
 <!-- HEADER CREATE MEAL !-->
 <div class="jumbotron text-center">
     <h2>Create Meal</h2>
@@ -34,7 +38,8 @@
               </form>
             </li>
         </ul>
-    </div>
+      </div>
+
 </div>
 
 <!-- MEAL INFORMATIONS -->
@@ -54,6 +59,7 @@
 <div class="col-sm-4 col-md-4 col-lg-4">
     <div class="panel panel-default">
         <div class="panel-heading"><span>Bilan</span></div>
+
         <div class="panel-body">
 
             <span> Sodium (mg) </span><span class="badge"> {{bilan.sodium_mg}} </span></br>
@@ -98,4 +104,4 @@
             <span> Cholesterol (mg) </span><span class="badge"> {{bilan.cholesterol_mg}} </span></br>
         </div>
     </div>
-</div>
+  </div>

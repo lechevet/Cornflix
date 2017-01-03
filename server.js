@@ -1,10 +1,29 @@
 //  SET UP
 var express = require( 'express' );
+var stormpath = require('express-stormpath'); //Gestion des comptes utilisateur
 var app = express();
+app.use(stormpath.init(app, {
+  apiKey: {
+    id: '4MIUE5CPOB6KEDF4UM71NAR6Z',
+    secret: 'VmkWcyZ3qmfSaInhXIFrz/8Y3sQDi1GV1dTGhoYCsZk'
+  },
+  application: {
+    href: `https://api.stormpath.com/v1/applications/5UuMr81z2fnECInr8cuxUj`
+  }
+}));
+
+app.on('stormpath.ready', function() {
+  app.listen(3000);
+});
 var mongoose = require( 'mongoose' );
 var morgan = require( 'morgan' ); //log requests to the console
 var bodyParser = require( 'body-parser' ); //pull information from HTML POST
 var methodeOverride = require( 'method-override' ); //simulate DELETE and PUT
+
+
+
+
+//fin du test Stormpath
 
 //  CONFIGURATION
 mongoose.connect( 'mongodb://localhost:27017/food' );
@@ -49,6 +68,8 @@ app.get( '/api/meals', function( req, res ) {
         if ( !err ) res.json( meals );
     } );
 } );
+
+
 
 app.post( '/api/meals', function( req, res ) {
     console.log( req.body );

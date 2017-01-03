@@ -20,11 +20,18 @@ var cornflix = angular.module( 'cornflix', [ 'ui.router' ] )
             .state( 'createMeal', {
                 url: '/createMeal',
                 templateUrl: 'createMeal.html'
-            } );
+            } )
+
+        .state( 'home', {
+            url: '/home',
+            templateUrl: 'home.html'
+        } );
 
         // use the HTML5 History API
         $locationProvider.html5Mode( true );
     } );
+
+
 
 //functions here
 function mainController( $scope, $http ) {
@@ -38,6 +45,15 @@ function mainController( $scope, $http ) {
     $scope.publicMeal = "true";
 
     $scope.bilan = {};
+
+    $http.get( '/api/home' )
+        .success( function( data ) {
+            $scope.meals = data;
+            //console.log( data );
+        } )
+        .error( function( data ) {
+            console.log( data );
+        } );
 
     $http.get( '/api/meals' )
         .success( function( data ) {
