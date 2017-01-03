@@ -72,7 +72,35 @@ app.delete( '/api/meals/:meal_id', function( req, res ) {
     } );
 } );
 
-app.post( '/api/ingredients/search', function( req, res ) {
+app.post( '/api/meals/searchByName', function( req, res ) {
+    Meal.find( {
+        name: { "$regex": req.body.name, "$options": "i" }
+    }, function( err, meals ) {
+        if ( err ) res.send( err );
+        res.json( meals );
+    } );
+} )
+
+app.post( '/api/ingredients/searchById', function( req, res ) {
+    console.log( "Ingredient => searchById" );
+    var ingredients = [];
+    var i = 0;
+    console.log( req.body );
+    for ( var j = 0; j < req.body.length; j++ ) {
+        Ingredient.find( {
+            _id: req.body[ j ]._id
+        }, function( err, ingredient ) {
+            if ( err ) res.send( err );
+            i++;
+            ingredients.push( ingredient );
+            if ( i >= req.body.length ) {
+                res.json( ingredients );
+            }
+        } );
+    }
+} )
+
+app.post( '/api/ingredients/searchByName', function( req, res ) {
     Ingredient.find( {
         name: { "$regex": req.body.name, "$options": "i" }
     }, function( err, ingredients ) {
@@ -96,7 +124,7 @@ var Meal = mongoose.model( 'meals', {
     public: Boolean,
     name: String,
     description: String,
-    ingredients: [ String ]
+    ingredients: [ { _id: String, weight: Number } ]
 } );
 
 var Ingredient = mongoose.model( 'ingredients', {

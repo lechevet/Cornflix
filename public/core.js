@@ -1,9 +1,18 @@
 var cornflix = angular.module( 'cornflix', [ 'ui.router' ] );
 
-cornflix.config( [ '$httpProvider', '$stateProvider', '$urlRouterProvider',
-    function( $httpProvider, $stateProvider, $urlRouterProvider ) {
+var cornflix = angular.module( 'cornflix', [ 'ui.router' ] )
+    .config( function( $httpProvider, $stateProvider, $urlRouterProvider, $routeProvider, $locationProvider ) {
+
+        // Route 404
+        // Si l'URL demandé n'est pas présent dans le stateProvider,
+        // on retourne sur l'URL 404
+        $urlRouterProvider.otherwise( '/' );
 
         $stateProvider
+            .state( 'home', {
+                url: '/',
+                templateUrl: 'home.html'
+            } )
             .state( 'meals', {
                 url: '/meals',
                 templateUrl: 'meals.html'
@@ -13,9 +22,9 @@ cornflix.config( [ '$httpProvider', '$stateProvider', '$urlRouterProvider',
                 templateUrl: 'createMeal.html'
             } );
 
-        $urlRouterProvider.otherwise( '/createMeal' );
-    }
-] );
+        // use the HTML5 History API
+        $locationProvider.html5Mode( true );
+    } );
 
 //functions here
 function mainController( $scope, $http ) {
@@ -23,7 +32,9 @@ function mainController( $scope, $http ) {
     $scope.formData = {};
     $scope.formCreateMeal = {};
     $scope.formIngredientSearch = {};
+    $scope.formMealSearch = {};
     $scope.addedIngredients = [];
+    $scope.addedMeals = [];
     $scope.publicMeal = "true";
 
     $scope.bilan = {};
@@ -37,25 +48,16 @@ function mainController( $scope, $http ) {
             console.log( data );
         } );
 
-    /*$http.get( '/api/ingredients/count' )
-        .success( function( data ) {
-            $scope.nbIngredients = data;
-        } )
-        .error( function( data ) {
-            console.log( 'Error: ' + data );
-        } );*/
-
     //  when submitting the add form, send meal to the node api
     $scope.createMeal = function() {
 
         var i = [];
         for ( j in $scope.addedIngredients )  {
-            i.push( $scope.addedIngredients[ j ]._id );
-            console.log( "ingredients id " + j + " => " + $scope.addedIngredients[ j ]._id );
+            i.push( {
+                _id: $scope.addedIngredients[ j ]._id,
+                weight: $scope.addedIngredients[ j ].weight
+            } );
         }
-        console.log( "public => " + $scope.publicMeal );
-        console.log( "meal name => " + $scope.formCreateMeal.name );
-        console.log( "meal description => " + $scope.formCreateMeal.description );
         var meal = {
             user_id: $scope.userId,
             public: $scope.publicMeal,
@@ -85,51 +87,142 @@ function mainController( $scope, $http ) {
             } );
     };
 
-    //modifies the weight of an ingredient and refreshes the bilan
-    $scope.setWeight = function (id, weight){
-      //looking for the ingredient with the passed id
-      for (i in $scope.addedIngredients){
-        if($scope.addedIngredients[i]._id == id){
-          //setting new property
-          $scope.addedIngredients[i].weight = weight;
+    $scope.searchMealByName = function() {
+        //if field empty get all
+        if ( $scope.formMealSearch == "undefined" || $scope.formMealSearch.name == null || $scope.formMealSearch.name == "" ) $scope.formMealSearch.name = "";
+
+        $http.post( '/api/meals/searchByName', $scope.formMealSearch )
+            .success( function( data ) {
+                $scope.formMealSearch = {};
+                $scope.mealSearchResult = data;
+                //console.log( data );
+            } )
+            .error( function( data ) {
+                console.log( 'Error: ' + data );
+            } );
+    }
+
+    $scope.addMeal = function( id ) {
+        //cancel if their is already 2 meal
+        if ( $scope.addedMeals.length > 1 ) return;
+
+        //Check if the meal is already added
+        for ( i in $scope.addedMeals ) {
+            if ( $scope.addedMeals[ i ]._id == id ) {
+                return; //cancel insertion
+            }
         }
-      }
-      //refreshes the bilan
-      $scope.refreshBilan();
+        console.log( "for" );
+        //else
+        for ( i in $scope.mealSearchResult ) {
+            if ( $scope.mealSearchResult[ i ]._id == id ) {
+                console.log( "meal found" );
+                var meal = $scope.mealSearchResult[ i ];
+                //meal.bilan = getMealBilan( meal.ingredients );
+                getMealBilan( meal.ingredients, function( data ) {
+                    console.log( "meal bilan end" );
+                    meal.bilan = data;
+                    $scope.addedMeals.push( meal );
+                    console.log( "meal pushed" );
+                } );
+                //console.log( "meal bilan end" );
+                //add to the array of added ingredients
+                //$scope.addedMeals.push( meal );
+                //console.log( "meal pushed" );
+            }
+        }
+        console.log( "end for" );
+    }
+
+    function getMealBilan( ingredients, callback ) {
+        console.log( "getMealBilan()" );
+        var bilan = {};
+        $http.post( '/api/ingredients/searchById', ingredients )
+            .success( function( data ) {
+                console.log( "find success" );
+                var tmp = data[ 0 ];
+                //var tmp = data;
+                for ( i in tmp ) {
+                    tmp[ i ].weight = ingredients[ i ].weight;
+                }
+                Object.keys( tmp[ 0 ] ).forEach( function( key, index ) {
+                    //reset the property first
+                    bilan[ key ] = 0;
+
+                    //add every ingredients property by a ratio of its weight
+                    for ( i in tmp ) {
+                        bilan[ key ] += Math.round( ( bilan[ key ] + tmp[ i ][ key ] ) * 100 / 100 * tmp[ i ].weight / 100 );
+                    }
+                } );
+                console.log( "return bilan" );
+                callback( bilan );
+            } )
+            .error( function( data ) {
+                console.log( 'Error : ' + data );
+            } )
+    };
+
+    $scope.deleteAddedMeal = function( id ) {
+        console.log( "delete meal" );
+        //cycle through the ingredients
+        for ( i in $scope.addedMeals ) {
+            //if the selected ingredient corresponds to the lookup id
+            if ( $scope.addedMeals[ i ]._id == id ) {
+                $scope.addedMeals.splice( i, 1 );
+                //$scope.refreshBilan();
+            }
+        }
+        console.log( "end" );
+    };
+
+    //modifies the weight of an ingredient and refreshes the bilan
+    $scope.setWeight = function( id, weight ) {
+        //looking for the ingredient with the passed id
+        for ( i in $scope.addedIngredients ) {
+            if ( $scope.addedIngredients[ i ]._id == id ) {
+                //setting new property
+                $scope.addedIngredients[ i ].weight = weight;
+            }
+        }
+        //refreshes the bilan
+        $scope.refreshBilan();
     };
 
     //refreshes the interface and updates the bilan
-    $scope.refreshBilan = function(){
-      console.log("Refreshing");
-      //if the list of added ingredients is empty, clear the bilan
-      if ($scope.addedIngredients[0] == null ){
-        //for each property of the bilan
-        Object.keys($scope.bilan).forEach(function(key,index) {
-
-              //reset the property first
-              $scope.bilan[key] = 0;
-          });
-      }
-      //normal refresh
-      else{
-          //for each property of the bilan
-          Object.keys($scope.addedIngredients[0]).forEach(function(key,index) {
+    $scope.refreshBilan = function() {
+        console.log( "Refreshing" );
+        //if the list of added ingredients is empty, clear the bilan
+        if ( $scope.addedIngredients[ 0 ] == null ) {
+            //for each property of the bilan
+            Object.keys( $scope.bilan ).forEach( function( key, index ) {
 
                 //reset the property first
-                $scope.bilan[key] = 0;
+                $scope.bilan[ key ] = 0;
+            } );
+        }
+        //normal refresh
+        else {
+            //for each property of the bilan
+            Object.keys( $scope.addedIngredients[ 0 ] ).forEach( function( key, index ) {
+
+                //reset the property first
+                $scope.bilan[ key ] = 0;
                 //add every ingredients property by a ratio of its weight
-                for (i in $scope.addedIngredients){
-                  //DEBUG
-                  //console.log(key + $scope.bilan[key] + " <- " + $scope.addedIngredients[i][key]);
-                  $scope.bilan[key] += Math.round( ( $scope.bilan[key] + $scope.addedIngredients[i][key] ) * 100 / 100 * $scope.addedIngredients[i].weight / 100);
+                for ( i in $scope.addedIngredients ) {
+                    //DEBUG
+                    //console.log(key + $scope.bilan[key] + " <- " + $scope.addedIngredients[i][key]);
+                    $scope.bilan[ key ] += Math.round( ( $scope.bilan[ key ] + $scope.addedIngredients[ i ][ key ] ) * 100 / 100 * $scope.addedIngredients[ i ].weight / 100 );
                 }
-            });
-          }
-      };
+            } );
+        }
+    };
 
     //  get ingredients by name
     $scope.searchIngredientByName = function() {
-        $http.post( '/api/ingredients/search', $scope.formIngredientSearch )
+        //if field empty get all
+        if ( $scope.formIngredientSearch == "undefined" || $scope.formIngredientSearch.name == null || $scope.formIngredientSearch.name == "" ) $scope.formIngredientSearch.name = "";
+
+        $http.post( '/api/ingredients/searchByName', $scope.formIngredientSearch )
             .success( function( data ) {
                 $scope.formIngredientSearch = {};
                 $scope.ingredientSearchResult = data;
@@ -145,17 +238,17 @@ function mainController( $scope, $http ) {
         //DEBUG
         console.log( "add ingredient" );
         //check if ingredient is already in the array
-        for ( i in $scope.addedIngredients ){
-          if ($scope.addedIngredients[i]._id == id){
-            return; //cancel insertion
-          }
+        for ( i in $scope.addedIngredients ) {
+            if ( $scope.addedIngredients[ i ]._id == id ) {
+                return; //cancel insertion
+            }
         }
         for ( i in $scope.ingredientSearchResult ) {
             if ( $scope.ingredientSearchResult[ i ]._id == id ) {
-              //if there is no weight, set it to 100g by default
-              if ( $scope.ingredientSearchResult[i].weight == null){
-                $scope.ingredientSearchResult[i].weight = 100;
-              }
+                //if there is no weight, set it to 100g by default
+                if ( $scope.ingredientSearchResult[ i ].weight == null ) {
+                    $scope.ingredientSearchResult[ i ].weight = 100;
+                }
 
                 //add to the array of added ingredients
                 $scope.addedIngredients.push( $scope.ingredientSearchResult[ i ] );
@@ -171,9 +264,9 @@ function mainController( $scope, $http ) {
         console.log( "delete ingredient" );
         //cycle through the ingredients
         for ( i in $scope.addedIngredients ) {
-          //if the selected ingredient corresponds to the lookup id
+            //if the selected ingredient corresponds to the lookup id
             if ( $scope.addedIngredients[ i ]._id == id ) {
-                $scope.addedIngredients.splice(i, 1);
+                $scope.addedIngredients.splice( i, 1 );
                 $scope.refreshBilan();
             }
         }

@@ -11,6 +11,15 @@
     overflow-y: scroll;
 }
 
+#meal-search-result {
+    display: block;
+    border: solid 1px lightgrey;
+    height: 200px;
+    width: 108.5%;
+    padding: none;
+    overflow-y: scroll;
+}
+
 #meal-list {
     margin-bottom:30px;
 }
