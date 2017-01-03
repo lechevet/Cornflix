@@ -19,8 +19,15 @@ var mongoose = require( 'mongoose' );
 var morgan = require( 'morgan' ); //log requests to the console
 var bodyParser = require( 'body-parser' ); //pull information from HTML POST
 var methodeOverride = require( 'method-override' ); //simulate DELETE and PUT
-
-
+/*
+app.get('/email', stormpath.loginRequired, function (req, res) {
+  res.send('Your email address is: ' + req.user.email);
+});
+*/
+app.post( '/api/userData',stormpath.getUser, function( req, res ) {
+  console.log("POST userData : " + req.user.email);
+  res.send(JSON.stringify(req.user.email));
+} );
 
 
 //fin du test Stormpath

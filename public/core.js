@@ -48,6 +48,16 @@ function mainController( $scope, $http ) {
 
     $scope.bilan = {};
 
+    //receives the user data
+    $http.post( '/api/userData' )
+        .success( function( data ) {
+            $scope.userId = data;
+            //console.log( $scope.userId );
+        } )
+        .error( function( data ) {
+            //console.log( data );
+        } );
+
     $http.get( '/api/home' )
         .success( function( data ) {
             $scope.meals = data;
