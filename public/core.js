@@ -57,28 +57,25 @@ function mainController( $scope, $http ) {
     $http.post( '/api/userData' )
         .success( function( data ) {
             $scope.userId = data;
-            //console.log( $scope.userId );
         } )
         .error( function( data ) {
-            //console.log( data );
+            console.log( "Error : " + data );
         } );
 
     $http.get( '/api/home' )
         .success( function( data ) {
             $scope.meals = data;
-            //console.log( data );
         } )
         .error( function( data ) {
-            console.log( data );
+            console.log( "Error : " + data );
         } );
 
     $http.get( '/api/meals' )
         .success( function( data ) {
             $scope.meals = data;
-            //console.log( data );
         } )
         .error( function( data ) {
-            console.log( data );
+            console.log( "Error : " + data );
         } );
 
     //  when submitting the add form, send meal to the node api
@@ -113,7 +110,6 @@ function mainController( $scope, $http ) {
         $http.delete( '/api/meals/' + id )
             .success( function( data ) {
                 $scope.meals = data;
-                console.log( data );
             } )
             .error( function( data ) {
                 console.log( 'Error: ' + data );
@@ -128,7 +124,6 @@ function mainController( $scope, $http ) {
             .success( function( data ) {
                 $scope.formMealSearch = {};
                 $scope.mealSearchResult = data;
-                //console.log( data );
             } )
             .error( function( data ) {
                 console.log( 'Error: ' + data );
@@ -254,7 +249,6 @@ function mainController( $scope, $http ) {
             .success( function( data ) {
                 $scope.formIngredientSearch = {};
                 $scope.ingredientSearchResult = data;
-                //console.log( data );
             } )
             .error( function( data ) {
                 console.log( 'Error: ' + data );
@@ -263,6 +257,8 @@ function mainController( $scope, $http ) {
 
     //adds the ingredient : from ingredientSearchResult to addedIngredients
     $scope.addIngredient = function( id ) {
+        //DEBUG
+        console.log( "add ingredient" );
         //check if ingredient is already in the array
         for ( i in $scope.addedIngredients ) {
             if ( $scope.addedIngredients[ i ]._id == id ) {
