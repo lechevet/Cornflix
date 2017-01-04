@@ -24,9 +24,9 @@ app.get('/email', stormpath.loginRequired, function (req, res) {
   res.send('Your email address is: ' + req.user.email);
 });
 */
-app.post( '/api/userData',stormpath.getUser, function( req, res ) {
-  console.log("POST userData : " + req.user.email);
-  res.send(JSON.stringify(req.user.email));
+app.post( '/api/userData', stormpath.getUser, function( req, res ) {
+    console.log( "POST userData : " + req.user.email );
+    res.send( JSON.stringify( req.user.email ) );
 } );
 
 
@@ -48,22 +48,18 @@ console.log( "App listening on port 8080" );
 
 //  ROUTES
 app.get( '/api/ingredients', function( req, res ) {
-    console.log( "Ingredient => find()" );
     Ingredient.find( function( err, ingredients ) {
         if ( err ) res.send( err );
-        console.log( ingredients );
         res.json( ingredients );
     } );
 } );
 
 app.get( '/api/ingredients/:ingredient_name', function( req, res ) {
-    console.log( "search result : " );
     Ingredient.find( {
         name: req.params.ingredient_name
     }, function( err, ingredients ) {
         if ( err ) console.log( err );
         else {
-            console.log( ingredients );
             res.json( ingredients );
         }
     } );
@@ -79,7 +75,6 @@ app.get( '/api/meals', function( req, res ) {
 
 
 app.post( '/api/meals', function( req, res ) {
-    console.log( req.body );
     Meal.create( req.body,
         function( err, meal ) {
             if ( err ) res.send( err );
@@ -110,10 +105,8 @@ app.post( '/api/meals/searchByName', function( req, res ) {
 } )
 
 app.post( '/api/ingredients/searchById', function( req, res ) {
-    console.log( "Ingredient => searchById" );
     var ingredients = [];
     var i = 0;
-    console.log( req.body );
     for ( var j = 0; j < req.body.length; j++ ) {
         Ingredient.findOne( {
             _id: req.body[ j ]._id
@@ -152,7 +145,7 @@ var Meal = mongoose.model( 'meals', {
     public: Boolean,
     name: String,
     description: String,
-    ingredients: [ { _id: String, weight: Number } ]
+    ingredients: [ { _id: String, name: String, weight: Number } ]
 } );
 
 var Ingredient = mongoose.model( 'ingredients', {
