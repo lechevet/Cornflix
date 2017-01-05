@@ -9,21 +9,34 @@ var cornflix = angular.module( 'cornflix', [ 'ui.router' ] )
         $urlRouterProvider.otherwise( '/home' );
 
         $stateProvider
+          //navigation states
+            //show meals
             .state( 'meals', {
                 url: '/meals',
                 templateUrl: 'meals.html'
             } )
+            //create meals
             .state( 'createMeal', {
                 url: '/createMeal',
                 templateUrl: 'createMeal.html'
             } )
+            //show profile
+            .state( 'profile', {
+                url: '/profile',
+                templateUrl: 'profile.html'
+            } )
+            //StormPath states
             .state( 'login', {
                 url: '/login',
             } )
             .state( 'register', {
                 url: '/register'
             } )
+            .state( 'logout', {
+                url: '/logout'
+            } )
 
+        //default state (as defined earlier)
         .state( 'home', {
             url: '/home',
             templateUrl: 'home.html'
@@ -38,6 +51,7 @@ var cornflix = angular.module( 'cornflix', [ 'ui.router' ] )
 //functions here
 function mainController( $scope, $http ) {
     $scope.userId = 0; /////////    A SUPPRIMER
+    $scope.userData = 0;
     $scope.formData = {};
     $scope.formCreateMeal = {};
     $scope.formIngredientSearch = {};
@@ -51,12 +65,17 @@ function mainController( $scope, $http ) {
     //receives the user data
     $http.post( '/api/userData' )
         .success( function( data ) {
-            $scope.userId = data;
-            //console.log( $scope.userId );
+          //adding user data
+          $scope.userData = data;
+          //unique ID is users email
+            $scope.userId = $scope.userData.email;
+            console.log( $scope.userId );
         } )
         .error( function( data ) {
             //console.log( data );
         } );
+
+
 
     $http.get( '/api/home' )
         .success( function( data ) {

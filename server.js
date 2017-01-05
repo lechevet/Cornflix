@@ -14,6 +14,7 @@ app.use( stormpath.init( app, {
 
 app.on( 'stormpath.ready', function() {
     app.listen( 3000 );
+    console.log("Application ready on 3000");
 } );
 var mongoose = require( 'mongoose' );
 var morgan = require( 'morgan' ); //log requests to the console
@@ -25,8 +26,8 @@ app.get('/email', stormpath.loginRequired, function (req, res) {
 });
 */
 app.post( '/api/userData',stormpath.getUser, function( req, res ) {
-  console.log("POST userData : " + req.user.email);
-  res.send(JSON.stringify(req.user.email));
+  console.log("POST /userData : " + req.user.fullName + " is connected");
+  res.send(JSON.stringify(req.user));
 } );
 
 
