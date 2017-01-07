@@ -14,7 +14,7 @@ app.use( stormpath.init( app, {
 
 app.on( 'stormpath.ready', function() {
     app.listen( 3000 );
-    console.log("Application ready on 3000");
+    console.log( "Application ready on 3000" );
 } );
 var mongoose = require( 'mongoose' );
 var morgan = require( 'morgan' ); //log requests to the console
@@ -25,9 +25,9 @@ app.get('/email', stormpath.loginRequired, function (req, res) {
   res.send('Your email address is: ' + req.user.email);
 });
 */
-app.post( '/api/userData',stormpath.getUser, function( req, res ) {
-  console.log("POST /userData : " + req.user.fullName + " is connected");
-  res.send(JSON.stringify(req.user));
+app.post( '/api/userData', stormpath.getUser, function( req, res ) {
+    console.log( "POST /userData : " + req.user.fullName + " is connected" );
+    res.send( JSON.stringify( req.user ) );
 } );
 
 
@@ -131,6 +131,14 @@ app.post( '/api/ingredients/searchByName', function( req, res ) {
     } );
 } )
 
+app.post( '/api/feedbacks', function( req, res ) {
+    Feedback.create( req.body,
+        function( err, feedback ) {
+            if ( err ) res.send( err );
+            else res.send( feedback );
+        } );
+} )
+
 //  FILES ROUTES
 /*app.get( '/createMeal', function( req, res ) {
     res.sendfile( './public/createMeal.html' );
@@ -147,6 +155,13 @@ var Meal = mongoose.model( 'meals', {
     name: String,
     description: String,
     ingredients: [ { _id: String, name: String, weight: Number } ]
+} );
+
+var Feedback = mongoose.model( 'feedbacks', {
+    mail: String,
+    category: String,
+    type: String,
+    comment: String
 } );
 
 var Ingredient = mongoose.model( 'ingredients', {

@@ -9,8 +9,8 @@ var cornflix = angular.module( 'cornflix', [ 'ui.router' ] )
         $urlRouterProvider.otherwise( '/home' );
 
         $stateProvider
-          //navigation states
-            //show meals
+        //navigation states
+        //show meals
             .state( 'meals', {
                 url: '/meals',
                 templateUrl: 'meals.html'
@@ -24,11 +24,16 @@ var cornflix = angular.module( 'cornflix', [ 'ui.router' ] )
             .state( 'profile', {
                 url: '/profile',
                 templateUrl: 'profile.html'
-                } )
+            } )
             //show details
             .state( 'detailsMeal', {
                 url: '/detailsMeal',
                 templateUrl: 'detailsMeal.html'
+            } )
+            //user feedback
+            .state( 'feedback', {
+                url: '/feedback',
+                templateUrl: 'feedback.html'
             } )
             //StormPath states
             .state( 'login', {
@@ -65,15 +70,16 @@ function mainController( $scope, $http ) {
     $scope.addedMeals = [];
     $scope.addedDetailsMeal = {};
     $scope.publicMeal = "true";
+    $scope.formFeedback = {};
 
     $scope.bilan = {};
 
     //receives the user data
     $http.post( '/api/userData' )
         .success( function( data ) {
-          //adding user data
-          $scope.userData = data;
-          //unique ID is users email
+            //adding user data
+            $scope.userData = data;
+            //unique ID is users email
             $scope.userId = $scope.userData.email;
             console.log( $scope.userId );
         } )
@@ -319,5 +325,15 @@ function mainController( $scope, $http ) {
         if ( $scope.publicMeal == "true" ) $scope.publicMeal = "false";
         else $scope.publicMeal = "true";
     };
+
+    $scope.sendFeedback = function() {
+        $http.post( '/api/feedbacks', $scope.formFeedback )
+            .success( function( data ) {
+                alert( 'Feedback sended, THANKS YOU !' );
+            } )
+            .error( function( data ) {
+                console.log( 'Error : ' + data );
+            } );
+    }
 
 }
