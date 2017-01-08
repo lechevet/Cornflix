@@ -50,7 +50,10 @@ console.log( "App listening on port 8080" );
 //  ROUTES
 app.get( '/api/ingredients', function( req, res ) {
     Ingredient.find( function( err, ingredients ) {
-        if ( err ) res.send( err );
+        if ( err ) {
+            console.log( err );
+            return res.send( err );
+        }
         res.json( ingredients );
     } );
 } );
@@ -59,17 +62,21 @@ app.get( '/api/ingredients/:ingredient_name', function( req, res ) {
     Ingredient.find( {
         name: req.params.ingredient_name
     }, function( err, ingredients ) {
-        if ( err ) console.log( err );
-        else {
-            res.json( ingredients );
+        if ( err ) {
+            console.log( err );
+            return res.send( err );
         }
+            res.json( ingredients );
     } );
 } );
 
 app.get( '/api/meals', function( req, res ) {
     Meal.find( function( err, meals ) {
-        //if ( err ) res.send( err );
-        if ( !err ) res.json( meals );
+        if ( err ) {
+            console.log( err );
+            return res.send( err );
+        }
+        res.json( meals );
     } );
 } );
 
@@ -78,8 +85,11 @@ app.get( '/api/meals', function( req, res ) {
 app.post( '/api/meals', function( req, res ) {
     Meal.create( req.body,
         function( err, meal ) {
-            if ( err ) res.send( err );
-            else res.send( meal );
+            if ( err ) {
+                console.log( err );
+                return res.send( err );
+            }
+            res.send( meal );
         } );
 } );
 
@@ -87,10 +97,15 @@ app.delete( '/api/meals/:meal_id', function( req, res ) {
     Meal.remove( {
         _id: req.params.meal_id
     }, function( err, result ) {
-        if ( err ) res.send( err );
-
+        if ( err ) {
+            console.log( err );
+            return res.send( err );
+        }
         Meal.find( function( err, meals ) {
-            if ( err ) res.send( err )
+            if ( err ) {
+                console.log( err );
+                return res.send( err );
+            }
             res.json( meals );
         } );
     } );
@@ -100,7 +115,10 @@ app.post( '/api/meals/searchByName', function( req, res ) {
     Meal.find( {
         name: { "$regex": req.body.name, "$options": "i" }
     }, function( err, meals ) {
-        if ( err ) res.send( err );
+        if ( err ) {
+            console.log( err );
+            return res.send( err );
+        }
         res.json( meals );
     } );
 } )
@@ -124,7 +142,10 @@ app.post( '/api/ingredients/searchById', function( req, res ) {
         Ingredient.findOne( {
             _id: req.body[ j ]._id
         }, function( err, ingredient ) {
-            if ( err ) res.send( err );
+            if ( err ) {
+                console.log( err );
+            }
+            console.log('CONTINUE BUG');
             i++;
             ingredients.push( ingredient );
             if ( i >= req.body.length ) {
@@ -138,7 +159,10 @@ app.post( '/api/ingredients/searchByName', function( req, res ) {
     Ingredient.find( {
         name: { "$regex": req.body.name, "$options": "i" }
     }, function( err, ingredients ) {
-        if ( err ) res.send( err );
+        if ( err ) {
+            console.log( err );
+            return res.send( err );
+        }
         res.json( ingredients );
     } );
 } )
@@ -146,8 +170,11 @@ app.post( '/api/ingredients/searchByName', function( req, res ) {
 app.post( '/api/feedbacks', function( req, res ) {
     Feedback.create( req.body,
         function( err, feedback ) {
-            if ( err ) res.send( err );
-            else res.send( feedback );
+            if ( err ) {
+                console.log( err );
+                return res.send( err );
+            }
+            res.send( feedback );
         } );
 } )
 
