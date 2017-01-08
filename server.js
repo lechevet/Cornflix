@@ -14,7 +14,7 @@ app.use( stormpath.init( app, {
 
 app.on( 'stormpath.ready', function() {
     app.listen( 3000 );
-    console.log( "Application ready on 3000" );
+    console.log("Application ready on 3000");
 } );
 var mongoose = require( 'mongoose' );
 var morgan = require( 'morgan' ); //log requests to the console
@@ -25,9 +25,9 @@ app.get('/email', stormpath.loginRequired, function (req, res) {
   res.send('Your email address is: ' + req.user.email);
 });
 */
-app.post( '/api/userData', stormpath.getUser, function( req, res ) {
-    console.log( "POST /userData : " + req.user.fullName + " is connected" );
-    res.send( JSON.stringify( req.user ) );
+app.post( '/api/userData',stormpath.getUser, function( req, res ) {
+  console.log("POST /userData : " + req.user.fullName + " is connected");
+  res.send(JSON.stringify(req.user));
 } );
 
 
@@ -101,6 +101,18 @@ app.post( '/api/meals/searchByName', function( req, res ) {
         name: { "$regex": req.body.name, "$options": "i" }
     }, function( err, meals ) {
         if ( err ) res.send( err );
+        res.json( meals );
+    } );
+} )
+
+app.post( '/api/profile/searchByEmail', function( req, res ) {
+    console.log("on est dedans");
+    console.log(JSON.parse(req.body.email));
+    Meal.find( {
+        user_id: { "$regex": JSON.parse(req.body.email), "$options": "i" }
+    }, function( err, meals ) {
+        if ( err ) res.send( err );
+        console.log(meals);
         res.json( meals );
     } );
 } )
