@@ -26,8 +26,10 @@ app.get('/email', stormpath.loginRequired, function (req, res) {
 });
 */
 app.post( '/api/userData',stormpath.getUser, function( req, res ) {
-  console.log("POST /userData : " + req.user.fullName + " is connected");
-  res.send(JSON.stringify(req.user));
+  if (req.hasOwnProperty("user")){
+    console.log("POST /userData : " + req.user.fullName + " is connected");
+    res.send(JSON.stringify(req.user));
+  }
 } );
 
 
