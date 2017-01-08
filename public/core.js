@@ -30,6 +30,7 @@ var cornflix = angular.module( 'cornflix', [ 'ui.router' ] )
                 url: '/detailsMeal',
                 templateUrl: 'detailsMeal.html'
             } )
+
             //StormPath states
             .state( 'login', {
                 url: '/login',
@@ -75,7 +76,7 @@ function mainController( $scope, $http ) {
           $scope.userData = data;
           //unique ID is users email
             $scope.userId = $scope.userData.email;
-            console.log( $scope.userId );
+            console.log( $scope.userData );
         } )
         .error( function( data ) {
             console.log( "Error : " + data );
@@ -149,6 +150,29 @@ function mainController( $scope, $http ) {
             .error( function( data ) {
                 console.log( 'Error: ' + data );
             } );
+    }
+
+    //search a meal by the users email
+    $scope.searchMealByEmail = function() {
+
+        //if email field is empty or undifined
+        if ($scope.userData.email == "null" || $scope.userData.email == "undefined"){
+          return;
+        }
+        //request to server
+        else{
+          console.log($scope.userData.email);
+          $http.post( '/api/profile/searchByEmail', $scope.userData.email)
+              .success( function( data ) {
+                  //store research meal list
+                  console.log("pre requete");
+                  $scope.mealSearchResult = data;
+                  console.log("post requete");
+              } )
+              .error( function( data ) {
+                  console.log( 'Error: ' + data );
+              } );
+        }
     }
 
     $scope.addMeal = function( id ) {

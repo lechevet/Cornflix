@@ -31,7 +31,7 @@
           <li role="button" id="login-pill" ng-show="userData.email == null"><a href="login">Login</a></li>
           <li role="button" id="register-pill" ng-show="userData.email == null"><a href="register">Register</a></li>
         <!--else  -->
-          <li role="button" ng-show="userData.email != null"><a href="profile"> {{userData.fullName}} - My Account</a></li>
+          <li role="button" ng-show="userData.email != null"><a href="#/profile"> {{userData.fullName}} - My Account</a></li>
           <li role="presenter" ng-show="userData.email != null">
             <form action="/logout" method="post">
               <input type="submit" class="btn btn-primary btn-small navbar-btn" value="Logout">

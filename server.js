@@ -105,6 +105,18 @@ app.post( '/api/meals/searchByName', function( req, res ) {
     } );
 } )
 
+app.post( '/api/profile/searchByEmail', function( req, res ) {
+    console.log("on est dedans");
+    console.log(JSON.parse(req.body.email));
+    Meal.find( {
+        user_id: { "$regex": JSON.parse(req.body.email), "$options": "i" }
+    }, function( err, meals ) {
+        if ( err ) res.send( err );
+        console.log(meals);
+        res.json( meals );
+    } );
+} )
+
 app.post( '/api/ingredients/searchById', function( req, res ) {
     var ingredients = [];
     var i = 0;
