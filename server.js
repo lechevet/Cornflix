@@ -53,6 +53,7 @@ console.log( "App listening on port 8080" );
 
 //  ROUTES
 
+app.use('/', routes);
 
 
 

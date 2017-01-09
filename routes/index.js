@@ -2,13 +2,13 @@ var ingredientsRoutes = require('./ingredients');
 var apiMeals = require('./apiMeals');
 var apiIngredients = require('./apiIngredients');
 var express = require( 'express' );
-var app = express();
+var router = express().Router;
 
-app.use('/ingredients', ingredientsRoutes);
-app.use('/api/meals', apiMeals);
-app.use('/api/ingredients/', apiIngredients);
+router.use('/ingredients', ingredientsRoutes);
+router.use('/api/meals', apiMeals);
+router.use('/api/ingredients/', apiIngredients);
 
-app.post( '/api/profile/searchByEmail', function( req, res ) {
+router.post( '/api/profile/searchByEmail', function( req, res ) {
     console.log("on est dedans");
     console.log(JSON.parse(req.body.email));
     Meal.find( {
@@ -20,7 +20,7 @@ app.post( '/api/profile/searchByEmail', function( req, res ) {
     } );
 } )
 
-app.post( '/api/feedbacks', function( req, res ) {
+router.post( '/api/feedbacks', function( req, res ) {
     Feedback.create( req.body,
         function( err, feedback ) {
             if ( err ) {
@@ -30,3 +30,5 @@ app.post( '/api/feedbacks', function( req, res ) {
             res.send( feedback );
         } );
 } )
+
+module.exports = router;
