@@ -13,8 +13,8 @@ app.use( stormpath.init( app, {
 } ) );
 
 app.on( 'stormpath.ready', function() {
-    app.listen( 3000 );
-    console.log("Application ready on 3000");
+
+    console.log("Application ready on 8080");
 } );
 var mongoose = require( 'mongoose' );
 var morgan = require( 'morgan' ); //log requests to the console
@@ -147,7 +147,6 @@ app.post( '/api/ingredients/searchById', function( req, res ) {
             if ( err ) {
                 console.log( err );
             }
-            console.log('CONTINUE BUG');
             i++;
             ingredients.push( ingredient );
             if ( i >= req.body.length ) {
